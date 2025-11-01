@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#f5f5f5"/>
+
+  <!-- Sidebar -->
+  <rect x="0" y="0" width="250" height="800" fill="#ffffff" stroke="#ddd" stroke-width="2"/>
+  <text x="125" y="40" font-size="20" font-weight="bold" text-anchor="middle" fill="#333">RoomMove</text>
+
+  <!-- Date Input Section -->
+  <rect x="20" y="80" width="210" height="100" fill="#f9f9f9" stroke="#ccc" stroke-width="1" rx="5"/>
+  <text x="30" y="105" font-size="14" font-weight="bold" fill="#555">이사 날짜 입력</text>
+  <rect x="30" y="120" width="190" height="40" fill="#fff" stroke="#aaa" stroke-width="1" rx="3"/>
+  <text x="40" y="145" font-size="12" fill="#999">📅 2025-11-16</text>
+
+  <!-- Region Filter Section -->
+  <rect x="20" y="200" width="210" height="80" fill="#f9f9f9" stroke="#ccc" stroke-width="1" rx="5"/>
+  <text x="30" y="225" font-size="14" font-weight="bold" fill="#555">지역 선택</text>
+  <rect x="30" y="240" width="190" height="30" fill="#fff" stroke="#aaa" stroke-width="1" rx="3"/>
+  <text x="40" y="260" font-size="12" fill="#999">서울 강남구 ▼</text>
+
+  <!-- App Info -->
+  <text x="30" y="320" font-size="12" fill="#777">버전: 1.0</text>
+  <text x="30" y="340" font-size="12" fill="#777">문의: support@roommove.com</text>
+
+  <!-- Main Content Area -->
+  <rect x="270" y="0" width="930" height="800" fill="#ffffff" stroke="#ddd" stroke-width="2"/>
+
+  <!-- Header -->
+  <text x="640" y="50" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">🏠 이사 준비 대시보드</text>
+
+  <!-- D-day Display -->
+  <rect x="290" y="80" width="890" height="100" fill="#e3f2fd" stroke="#2196f3" stroke-width="2" rx="8"/>
+  <text x="640" y="120" font-size="32" font-weight="bold" text-anchor="middle" fill="#1976d2">D-14</text>
+  <text x="640" y="155" font-size="16" text-anchor="middle" fill="#555">이사까지 14일 남았습니다</text>
+
+  <!-- Checklist Section -->
+  <rect x="290" y="200" width="430" height="380" fill="#fff" stroke="#ddd" stroke-width="1" rx="5"/>
+  <text x="305" y="230" font-size="18" font-weight="bold" fill="#333">📋 체크리스트</text>
+
+  <!-- Checklist Items -->
+  <g>
+    <rect x="305" y="250" width="20" height="20" fill="#fff" stroke="#aaa" stroke-width="1" rx="2"/>
+    <text x="335" y="265" font-size="14" fill="#555">전입신고 (이사 후 14일 이내)</text>
+  </g>
+  <g>
+    <rect x="305" y="285" width="20" height="20" fill="#4caf50" stroke="#4caf50" stroke-width="1" rx="2"/>
+    <path d="M 310 295 L 315 300 L 322 288" stroke="#fff" stroke-width="2" fill="none"/>
+    <text x="335" y="300" font-size="14" fill="#555">인터넷/TV 해지 신청</text>
+  </g>
+  <g>
+    <rect x="305" y="320" width="20" height="20" fill="#fff" stroke="#aaa" stroke-width="1" rx="2"/>
+    <text x="335" y="335" font-size="14" fill="#555">공공요금 정산 및 해지</text>
+  </g>
+  <g>
+    <rect x="305" y="355" width="20" height="20" fill="#fff" stroke="#aaa" stroke-width="1" rx="2"/>
+    <text x="335" y="370" font-size="14" fill="#555">이삿짐 센터 예약</text>
+  </g>
+  <g>
+    <rect x="305" y="390" width="20" height="20" fill="#fff" stroke="#aaa" stroke-width="1" rx="2"/>
+    <text x="335" y="405" font-size="14" fill="#555">청소 및 정리</text>
+  </g>
+  <g>
+    <rect x="305" y="425" width="20" height="20" fill="#fff" stroke="#aaa" stroke-width="1" rx="2"/>
+    <text x="335" y="440" font-size="14" fill="#555">우편물 전달 신청</text>
+  </g>
+  <g>
+    <rect x="305" y="460" width="20" height="20" fill="#fff" stroke="#aaa" stroke-width="1" rx="2"/>
+    <text x="335" y="475" font-size="14" fill="#555">보증금 반환 확인</text>
+  </g>
+
+  <!-- Movers Info Section -->
+  <rect x="750" y="200" width="430" height="380" fill="#fff" stroke="#ddd" stroke-width="1" rx="5"/>
+  <text x="765" y="230" font-size="18" font-weight="bold" fill="#333">🚚 이삿짐 센터 정보</text>
+
+  <!-- Table Header -->
+  <rect x="765" y="245" width="400" height="35" fill="#f5f5f5" stroke="#ddd" stroke-width="1"/>
+  <text x="775" y="265" font-size="13" font-weight="bold" fill="#333">업체명</text>
+  <text x="945" y="265" font-size="13" font-weight="bold" fill="#333">연락처</text>
+  <text x="1085" y="265" font-size="13" font-weight="bold" fill="#333">예상금액</text>
+
+  <!-- Table Rows -->
+  <rect x="765" y="280" width="400" height="40" fill="#fff" stroke="#eee" stroke-width="1"/>
+  <text x="775" y="305" font-size="12" fill="#555">강남 이사 전문</text>
+  <text x="945" y="305" font-size="12" fill="#555">02-1234-5678</text>
+  <text x="1085" y="305" font-size="12" fill="#555">30만원</text>
+
+  <rect x="765" y="320" width="400" height="40" fill="#fafafa" stroke="#eee" stroke-width="1"/>
+  <text x="775" y="345" font-size="12" fill="#555">서울 빠른 이사</text>
+  <text x="945" y="345" font-size="12" fill="#555">02-2345-6789</text>
+  <text x="1085" y="345" font-size="12" fill="#555">28만원</text>
+
+  <rect x="765" y="360" width="400" height="40" fill="#fff" stroke="#eee" stroke-width="1"/>
+  <text x="775" y="385" font-size="12" fill="#555">믿음 이삿짐</text>
+  <text x="945" y="385" font-size="12" fill="#555">02-3456-7890</text>
+  <text x="1085" y="385" font-size="12" fill="#555">32만원</text>
+
+  <rect x="765" y="400" width="400" height="40" fill="#fafafa" stroke="#eee" stroke-width="1"/>
+  <text x="775" y="425" font-size="12" fill="#555">안전 포장 이사</text>
+  <text x="945" y="425" font-size="12" fill="#555">02-4567-8901</text>
+  <text x="1085" y="425" font-size="12" fill="#555">35만원</text>
+
+  <rect x="765" y="440" width="400" height="40" fill="#fff" stroke="#eee" stroke-width="1"/>
+  <text x="775" y="465" font-size="12" fill="#555">1인 가구 전문</text>
+  <text x="945" y="465" font-size="12" fill="#555">02-5678-9012</text>
+  <text x="1085" y="465" font-size="12" fill="#555">25만원</text>
+
+  <!-- Tab Navigation at Bottom -->
+  <rect x="290" y="600" width="890" height="50" fill="#f5f5f5" stroke="#ddd" stroke-width="1"/>
+  <rect x="290" y="600" width="295" height="50" fill="#2196f3"/>
+  <text x="437" y="630" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">홈</text>
+  <text x="732" y="630" font-size="14" text-anchor="middle" fill="#555">이삿짐 정보</text>
+  <text x="1027" y="630" font-size="14" text-anchor="middle" fill="#555">도움말</text>
+</svg>
