@@ -25,45 +25,62 @@ def render_checklist():
         st.write(f"DEBUG: Response = {response}")  # 사용자에게도 보여주기
         return
 
-    # 체크리스트 표시
-    for item in checklist_items:
-        col1, col2 = st.columns([0.1, 0.9])
+    # 체크리스트를 하나의 컨테이너에 표시
+    with st.container():
+        # CSS로 간격 조정
+        st.markdown("""
+        <style>
+        .checklist-item {
+            padding: 0.3rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+        </style>
+        """, unsafe_allow_html=True)
 
-        with col1:
-            # 체크박스
-            checked = st.checkbox(
-                "",
-                value=item.get("completed", False),
-                key=f"check_{item['id']}",
-                label_visibility="collapsed"
-            )
+        for idx, item in enumerate(checklist_items):
+            col1, col2 = st.columns([0.08, 0.92])
 
-            # 상태 변경 시 API 호출
-            if checked != item.get("completed", False):
-                update_response = api_client.update_checklist_item(
-                    item["id"],
-                    checked
+            with col1:
+                # 체크박스
+                checked = st.checkbox(
+                    "",
+                    value=item.get("completed", False),
+                    key=f"check_{item['id']}",
+                    label_visibility="collapsed"
                 )
-                if "error" not in update_response:
-                    st.rerun()
 
-        with col2:
-            # 제목과 설명
-            if item.get("completed", False):
-                st.markdown(f"~~{item['title']}~~")
-                if item.get("description"):
-                    st.caption(f"~~{item['description']}~~")
-            else:
-                st.markdown(f"**{item['title']}**")
-                if item.get("description"):
-                    st.caption(item["description"])
+                # 상태 변경 시 API 호출
+                if checked != item.get("completed", False):
+                    update_response = api_client.update_checklist_item(
+                        item["id"],
+                        checked
+                    )
+                    if "error" not in update_response:
+                        st.rerun()
 
-        st.markdown("---")
+            with col2:
+                # 제목과 설명 (간격 줄이기)
+                if item.get("completed", False):
+                    st.markdown(f'<div style="margin-bottom: -0.5rem;"><s>{item["title"]}</s></div>', unsafe_allow_html=True)
+                    if item.get("description"):
+                        st.caption(f"~~{item['description']}~~")
+                else:
+                    st.markdown(f'<div style="margin-bottom: -0.5rem;"><strong>{item["title"]}</strong></div>', unsafe_allow_html=True)
+                    if item.get("description"):
+                        st.caption(item["description"])
 
-    # 진행률 표시
-    completed_count = sum(1 for item in checklist_items if item.get("completed", False))
-    total_count = len(checklist_items)
-    progress = completed_count / total_count if total_count > 0 else 0
+            # 마지막 항목이 아니면 얇은 구분선
+            if idx < len(checklist_items) - 1:
+                st.markdown('<hr style="margin: 0.5rem 0; border: none; border-top: 1px solid #e0e0e0;">', unsafe_allow_html=True)
 
-    st.progress(progress)
-    st.caption(f"완료: {completed_count}/{total_count} ({int(progress * 100)}%)")
+        # 진행률 표시
+        st.markdown('<div style="margin-top: 1rem;"></div>', unsafe_allow_html=True)
+        completed_count = sum(1 for item in checklist_items if item.get("completed", False))
+        total_count = len(checklist_items)
+        progress = completed_count / total_count if total_count > 0 else 0
+
+        st.progress(progress)
+        st.caption(f"완료: {completed_count}/{total_count} ({int(progress * 100)}%)")

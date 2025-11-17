@@ -42,13 +42,22 @@ class APIClient:
     def get_checklist(self) -> Dict[str, Any]:
         """체크리스트 조회"""
         try:
-            response = requests.get(
-                f"{self.base_url}/api/checklist",
-                headers=self._get_headers()
-            )
+            url = f"{self.base_url}/api/checklist"
+            headers = self._get_headers()
+            print(f"DEBUG - Requesting URL: {url}")
+            print(f"DEBUG - Headers: {headers}")
+
+            response = requests.get(url, headers=headers)
+            print(f"DEBUG - Status Code: {response.status_code}")
+            print(f"DEBUG - Response Text: {response.text[:500]}")  # 처음 500자만
+
             response.raise_for_status()
-            return response.json()
+            data = response.json()
+            print(f"DEBUG - Parsed JSON keys: {data.keys()}")
+            print(f"DEBUG - Checklist length: {len(data.get('checklist', []))}")
+            return data
         except Exception as e:
+            print(f"DEBUG - Exception: {type(e).__name__}: {e}")
             return {"error": str(e)}
 
     def update_checklist_item(self, item_id: int, completed: bool) -> Dict[str, Any]:

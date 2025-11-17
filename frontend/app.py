@@ -21,12 +21,13 @@ init_session_state()
 # API 클라이언트 세션 ID 설정
 api_client.set_session_id(st.session_state.session_id)
 
-# ========== 우측 사이드바 ==========
+
+# ========== 좌측 사이드바 ==========
 with st.sidebar:
     st.title("🏠 RoomMove")
     st.markdown("*1인 가구 이사 준비 도우미*")
     st.markdown("---")
-    
+
     # 1. 이사 날짜 입력
     st.subheader("📅 이사 날짜 입력")
     default_date = date.today() + timedelta(days=14)
@@ -38,19 +39,13 @@ with st.sidebar:
         label_visibility="collapsed"
     )
     st.session_state.move_date = move_date
-    
+
     # 2. D-DAY 표시
     render_dday_display(move_date)
-    
+
     st.markdown("---")
-    
-    # 3. 체크리스트
-    st.subheader("✅ 이사 체크리스트")
-    render_checklist()
-    
-    st.markdown("---")
-    
-    # 4. 지역 선택
+
+    # 3. 지역 선택
     st.subheader("📍 지역 선택")
     regions = [
         "서울 강남구",
@@ -67,65 +62,63 @@ with st.sidebar:
         label_visibility="collapsed"
     )
     st.session_state.selected_region = selected_region
-    
-    # 5. 이삿짐 정보
+
+    # 4. 이삿짐 정보
     with st.expander("🚚 이삿짐 업체 정보", expanded=False):
         render_movers_table(selected_region)
-    
+
     st.markdown("---")
-    
+
     # 앱 정보
     st.caption("**RoomMove v1.0**")
     st.caption("📧 문의: support@roommove.com")
 
-# ========== 메인 화면 ==========
-st.title("💬 AI 이사 도우미")
-st.markdown("이사 준비에 대해 무엇이든 물어보세요!")
+# ========== 메인 화면 및 우측 사이드바 ==========
+# 메인 화면과 우측 사이드바를 컬럼으로 분할
+col_main, col_right = st.columns([3, 1])
 
-# 자주 묻는 질문 (상단 배치)
-st.subheader("📚 자주 묻는 질문")
+with col_main:
+    # 챗봇 중심 UI
+    st.title("💬 AI 이사 도우미")
 
-col1, col2 = st.columns(2)
+    # 빠른 질문 버튼들 (채팅 UI 느낌)
+    st.markdown("##### 💡 빠른 질문")
+    quick_q1, quick_q2, quick_q3, quick_q4 = st.columns(4)
 
-with col1:
-    with st.expander("❓ 전입신고는 언제 해야 하나요?"):
-        st.markdown("""
-        전입신고는 **이사 후 14일 이내**에 하셔야 합니다.
-        
-        **신청 방법:**
-        - 주민센터 방문
-        - 정부24 온라인 신청
-        """)
-    
-    with st.expander("❓ 공공요금 정산은?"):
-        st.markdown("""
-        **정산 절차:**
-        1. 전기, 가스, 수도 최종 고지서 확인
-        2. 각 회사에 해지 신청
-        3. 잔여 요금 납부
-        """)
+    with quick_q1:
+        if st.button("📝 전입신고", use_container_width=True):
+            st.session_state.quick_question = "전입신고는 언제 해야 하나요?"
 
-with col2:
-    with st.expander("❓ 이삿짐 센터 예약 시기는?"):
-        st.markdown("""
-        이삿짐 센터는 **최소 1주일 전**에 예약하세요.
-        
-        **주의사항:**
-        - 주말/월말은 더 일찍 예약
-        - 여러 업체 견적 비교 권장
-        """)
-    
-    with st.expander("❓ 인터넷/TV 해지는?"):
-        st.markdown("""
-        **이사 2주 전**에 해지 또는 이전 신청하세요.
-        
-        **옵션:**
-        - 해지: 완전히 끊기
-        - 이전: 새 집으로 옮기기
-        """)
+    with quick_q2:
+        if st.button("💰 공공요금", use_container_width=True):
+            st.session_state.quick_question = "공공요금은 어떻게 정산하나요?"
 
-st.markdown("---")
+    with quick_q3:
+        if st.button("🚚 이삿짐", use_container_width=True):
+            st.session_state.quick_question = "이삿짐 센터는 언제 예약하나요?"
 
-# 챗봇 렌더링 (하단 배치)
-st.subheader("💬 이사 도움말")
-render_chatbot()
+    with quick_q4:
+        if st.button("📡 인터넷", use_container_width=True):
+            st.session_state.quick_question = "인터넷/TV는 어떻게 해지하나요?"
+
+    st.markdown("---")
+
+    # 챗봇 렌더링 (메인)
+    render_chatbot()
+
+# ========== 우측 사이드바 (체크리스트) ==========
+# 우측 컬럼 스타일 (전역 CSS)
+st.markdown("""
+<style>
+/* 우측 컬럼 배경색 - 구조에 맞춰 선택 */
+section.main > div:first-child > div.block-container > div > div > div > div:nth-child(2) {
+    background-color: #f0f2f6 !important;
+    padding: 2rem 1rem !important;
+    min-height: 100vh;
+}
+</style>
+""", unsafe_allow_html=True)
+
+with col_right:
+    st.subheader("✅ 이사 체크리스트")
+    render_checklist()
