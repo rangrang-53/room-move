@@ -14,12 +14,8 @@ class ChecklistService:
 
     def get_all_items(self, db: Session, session_id: Optional[str] = None) -> List[ChecklistItem]:
         """모든 체크리스트 항목 조회"""
-        # 데이터베이스에서 조회
-        query = db.query(ChecklistItem)
-        if session_id:
-            query = query.filter(ChecklistItem.session_id == session_id)
-
-        items = query.all()
+        # 데이터베이스에서 조회 (session_id 필터링 제거 - 체크리스트는 전역 항목)
+        items = db.query(ChecklistItem).all()
 
         # DB에 데이터가 없으면 JSON 파일에서 로드
         if not items:

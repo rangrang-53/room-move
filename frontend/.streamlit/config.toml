@@ -9,3 +9,18 @@ font = "sans serif"
 port = 8501
 enableCORS = false
 enableXsrfProtection = true
+headless = true
+
+[client]
+showErrorDetails = false
+toolbarMode = "viewer"
+
+[runner]
+fastReruns = true
+
+[browser]
+gatherUsageStats = false
+
+[ui]
+hideTopBar = true
+hideSidebarNav = true

@@ -28,15 +28,15 @@ def render_dday_display(move_date: date):
         f"""
         <div style="
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 2rem;
+            padding: 1rem;
             border-radius: 10px;
             text-align: center;
             color: white;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
         ">
-            <h1 style="margin: 0; font-size: 3rem;">{emoji} D{delta:+d}</h1>
-            <p style="margin: 0.5rem 0 0 0; font-size: 1.2rem;">{message}</p>
-            <p style="margin: 0.5rem 0 0 0; font-size: 1rem; opacity: 0.9;">
+            <h1 style="margin: 0; font-size: 1.8rem; font-weight: bold;">D{delta:+d}</h1>
+            <p style="margin: 0.3rem 0 0 0; font-size: 0.85rem;">{message}</p>
+            <p style="margin: 0.3rem 0 0 0; font-size: 0.75rem; opacity: 0.9;">
                 이사 예정일: {move_date.strftime('%Y년 %m월 %d일')}
             </p>
         </div>

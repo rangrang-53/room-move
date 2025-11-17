@@ -1,5 +1,7 @@
 from typing import Dict, Any, TypedDict
 from .tools import search_tools
+import google.generativeai as genai
+import os
 
 
 class AgentState(TypedDict):
@@ -57,14 +59,48 @@ async def search_node(state: AgentState) -> AgentState:
 
 
 async def answer_generation_node(state: AgentState) -> AgentState:
-    """응답 생성 노드"""
+    """응답 생성 노드 (Gemini AI 사용)"""
+    question = state.get("question", "")
     search_results = state.get("search_results", [])
 
-    # 검색 결과를 바탕으로 답변 생성
-    if search_results:
-        answer = search_results[0].get("info", "죄송합니다. 관련 정보를 찾을 수 없습니다.")
+    # Gemini API 설정
+    api_key = os.getenv("GEMINI_API_KEY", "")
+
+    # API 키가 있고 유효한 경우 Gemini 사용
+    if api_key and api_key != "dummy_gemini_api_key" and len(api_key) > 20:
+        try:
+            genai.configure(api_key=api_key)
+            model = genai.GenerativeModel('gemini-2.0-flash-exp')
+
+            # 프롬프트 구성
+            context = ""
+            if search_results:
+                context = "\n".join([f"- {r.get('info', '')}" for r in search_results])
+
+            prompt = f"""당신은 1인 가구 이사를 도와주는 친절한 AI 어시스턴트입니다.
+
+사용자 질문: {question}
+
+{f'참고 정보:{context}' if context else ''}
+
+위 질문에 대해 친절하고 구체적으로 답변해주세요. 이사 관련 실용적인 조언을 제공하되, 간결하게 2-3문장으로 답변해주세요."""
+
+            response = model.generate_content(prompt)
+            answer = response.text.strip()
+
+        except Exception as e:
+            print(f"Gemini API 오류: {e}")
+            # 오류 발생 시 기본 답변 사용
+            if search_results:
+                answer = search_results[0].get("info", "죄송합니다. 관련 정보를 찾을 수 없습니다.")
+            else:
+                answer = "이사 관련 질문에 대해 더 구체적으로 말씀해 주시면 도와드리겠습니다."
     else:
-        answer = "이사 관련 질문에 대해 더 구체적으로 말씀해 주시면 도와드리겠습니다."
+        # API 키가 없으면 기본 지식 베이스 사용
+        if search_results:
+            answer = search_results[0].get("info", "죄송합니다. 관련 정보를 찾을 수 없습니다.")
+        else:
+            answer = "이사 관련 질문에 대해 더 구체적으로 말씀해 주시면 도와드리겠습니다."
 
     return {
         **state,

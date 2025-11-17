@@ -7,11 +7,7 @@ def render_help_page():
 
     st.title("💬 이사 도움말")
 
-    # 챗봇 렌더링
-    render_chatbot()
-
-    # 하단 FAQ
-    st.markdown("---")
+    # FAQ를 먼저 표시
     st.subheader("📚 자주 묻는 질문 (FAQ)")
 
     with st.expander("❓ 전입신고는 언제 해야 하나요?"):
@@ -72,3 +68,8 @@ def render_help_page():
         - 인터넷우체국 (www.epost.go.kr)
         - 우정사업본부 앱
         """)
+
+    # 챗봇은 하단에 렌더링
+    st.markdown("---")
+    st.subheader("🤖 AI 챗봇에게 질문하기")
+    render_chatbot()
