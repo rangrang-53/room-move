@@ -322,10 +322,12 @@ def render_sidebar():
         with st.expander("🚚 이삿짐 업체 정보"):
             movers = get_movers(region)
             for mover in movers:
+                price = mover.get('price', 0)
+                price_str = f"{price:,}원" if price else "가격 문의"
                 st.markdown(f"""
                 **{mover['name']}**
-                ⭐ {mover['rating']} | {mover['price_range']}
-                📞 {mover['phone']}
+                💰 {price_str}
+                📞 {mover.get('phone', '연락처 없음')}
                 """)
                 st.markdown("---")
 
