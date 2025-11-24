@@ -62,8 +62,8 @@ def render_checklist():
                         st.rerun()
 
             with col2:
-                # 제목과 설명 (간격 줄이기)
-                if item.get("completed", False):
+                # 제목과 설명 (간격 줄이기) - 체크박스 현재 상태 기준으로 표시
+                if checked:
                     st.markdown(f'<div style="margin-bottom: -0.5rem;"><s>{item["title"]}</s></div>', unsafe_allow_html=True)
                     if item.get("description"):
                         st.caption(f"~~{item['description']}~~")

@@ -158,7 +158,11 @@ def render_chatbot():
                 break
 
         if user_question:
-            # API 호출
+            # 자동 체크 API 호출 (메시지에서 완료된 작업 감지)
+            auto_check_response = api_client.auto_check_from_message(user_question)
+            has_auto_check = auto_check_response and auto_check_response.get("checked_items")
+
+            # 챗봇 API 호출
             response = api_client.send_chat_message(user_question)
 
             if "error" in response:
@@ -166,8 +170,19 @@ def render_chatbot():
             else:
                 answer = response.get("answer", "응답을 생성할 수 없습니다.")
 
-            # 로딩 메시지를 실제 답변으로 교체
-            st.session_state.chat_messages[-1]["content"] = answer
+            # 자동 체크 메시지가 있으면 별도 말풍선으로 먼저 표시
+            if has_auto_check:
+                auto_check_message = f"✅ {auto_check_response.get('message', '')}"
+                # 로딩 메시지를 자동 체크 메시지로 교체
+                st.session_state.chat_messages[-1]["content"] = auto_check_message
+                # 챗봇 답변을 새 말풍선으로 추가
+                st.session_state.chat_messages.append({
+                    "role": "assistant",
+                    "content": answer
+                })
+            else:
+                # 로딩 메시지를 실제 답변으로 교체
+                st.session_state.chat_messages[-1]["content"] = answer
 
             # 페이지 새로고침으로 실제 답변 표시
             st.rerun()

@@ -73,6 +73,19 @@ class APIClient:
         except Exception as e:
             return {"error": str(e)}
 
+    def auto_check_from_message(self, message: str) -> Dict[str, Any]:
+        """메시지에서 완료된 작업을 감지하여 자동 체크"""
+        try:
+            response = requests.post(
+                f"{self.base_url}/api/checklist/auto-check",
+                json={"message": message},
+                headers=self._get_headers()
+            )
+            response.raise_for_status()
+            return response.json()
+        except Exception as e:
+            return {"error": str(e)}
+
     # Movers API
     def get_movers(self, region: Optional[str] = None) -> Dict[str, Any]:
         """이삿짐 센터 조회"""

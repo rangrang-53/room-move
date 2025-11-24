@@ -26,6 +26,9 @@ langchain-google-genai==0.0.6
 langsmith==0.0.69
 google-generativeai==0.8.5
 
+# RAG (Vector Store)
+chromadb==0.4.22
+
 # MCP Tools (Search)
 anthropic==0.8.1
 
