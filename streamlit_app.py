@@ -299,13 +299,22 @@ def render_sidebar():
         # D-Day 표시
         if move_date:
             dday_info = calculate_dday(move_date)
+            # 톤 다운된 카드형 D-day UI
             st.markdown(f"""
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                        padding: 1.5rem; border-radius: 1rem; text-align: center; margin: 1rem 0;">
-                <div style="font-size: 2.5rem; font-weight: bold; color: white;">{dday_info['display']}</div>
-                <div style="color: rgba(255,255,255,0.9); margin-top: 0.5rem;">{dday_info['message']}</div>
-                <div style="color: rgba(255,255,255,0.7); font-size: 0.8rem; margin-top: 0.3rem;">
-                    이사 예정일: {dday_info['move_date']}
+            <div style="
+                background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+                border: 2px solid rgba(102, 126, 234, 0.3);
+                padding: 1.2rem;
+                border-radius: 16px;
+                text-align: center;
+                margin: 1rem 0;
+                box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+            ">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">📅</div>
+                <div style="font-size: 2rem; font-weight: bold; color: #667eea;">{dday_info['display']}</div>
+                <div style="color: #555; margin-top: 0.5rem; font-weight: 500;">{dday_info['message']}</div>
+                <div style="color: #888; font-size: 0.85rem; margin-top: 0.3rem;">
+                    {dday_info['move_date']}
                 </div>
             </div>
             """, unsafe_allow_html=True)
@@ -334,82 +343,199 @@ def render_sidebar():
 
 def render_checklist_panel():
     """체크리스트 패널 렌더링"""
-    st.markdown("#### ✅ 이사 체크리스트")
+    st.markdown('<h3 style="margin-top: 0; padding-top: 0;">✅ 이사 체크리스트</h3>', unsafe_allow_html=True)
 
     checklist = get_checklist()
 
+    # 카드 스타일 CSS
+    st.markdown("""
+    <style>
+    .completed-card {
+        background-color: #f0f0f0;
+        border-radius: 12px;
+        padding: 1rem 1.2rem;
+        margin-bottom: 1.1rem;
+        border-left: 4px solid #a0a0a0;
+        opacity: 0.8;
+        transition: all 0.3s ease;
+    }
+    .completed-card:hover { opacity: 0.9; }
+    .pending-card {
+        background-color: #ffffff;
+        border-radius: 12px;
+        padding: 1rem 1.2rem;
+        margin-bottom: 1.1rem;
+        border-left: 4px solid #667eea;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+    }
+    .pending-card:hover {
+        box-shadow: 0 4px 8px rgba(102, 126, 234, 0.15);
+        transform: translateY(-2px);
+    }
+    .item-title {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.4rem;
+        line-height: 1.4;
+    }
+    .item-description {
+        font-size: 0.85rem;
+        color: #666;
+        line-height: 1.5;
+        margin-top: 0.2rem;
+    }
+    [data-testid="column"]:has(input[type="checkbox"]) {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
     for item in checklist:
+        is_completed = item.get("completed", False)
+        card_class = "completed-card" if is_completed else "pending-card"
+
+        if is_completed:
+            title_html = f'<div class="item-title" style="color: #888;"><s>{item["title"]}</s></div>'
+            desc_html = f'<div class="item-description" style="color: #999;"><s>{item["description"]}</s></div>' if item.get("description") else ""
+        else:
+            title_html = f'<div class="item-title" style="color: #262730;">{item["title"]}</div>'
+            desc_html = f'<div class="item-description">{item["description"]}</div>' if item.get("description") else ""
+
         col1, col2 = st.columns([0.08, 0.92])
 
         with col1:
             checked = st.checkbox(
                 "",
-                value=item["completed"],
+                value=is_completed,
                 key=f"check_{item['id']}",
                 label_visibility="collapsed"
             )
 
-            if checked != item["completed"]:
+            if checked != is_completed:
                 update_checklist_item(item["id"], checked)
                 st.rerun()
 
         with col2:
-            if checked:
-                st.markdown(f'<s>{item["title"]}</s>', unsafe_allow_html=True)
-                if item.get("description"):
-                    st.caption(f"~~{item['description']}~~")
-            else:
-                st.markdown(f'**{item["title"]}**')
-                if item.get("description"):
-                    st.caption(item["description"])
-
-        st.markdown('<hr style="margin: 0.3rem 0; border: none; border-top: 1px solid #e0e0e0;">', unsafe_allow_html=True)
+            st.markdown(
+                f'<div class="{card_class}" id="card_{item["id"]}" style="margin-bottom: 0;">{title_html}{desc_html}</div>',
+                unsafe_allow_html=True
+            )
 
     # 진행률
     completed_count = sum(1 for item in checklist if item["completed"])
     total_count = len(checklist)
     progress = completed_count / total_count if total_count > 0 else 0
 
-    st.progress(progress)
-    st.caption(f"완료: {completed_count}/{total_count} ({int(progress * 100)}%)")
+    # 카드형 진행률 + 스타일링
+    st.markdown(f"""
+    <div style="
+        background-color: white;
+        border-radius: 12px;
+        padding: 1.2rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        border-left: 4px solid #667eea;
+        margin-top: 0.5rem;
+    ">
+        <div style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        ">
+            <span style="font-size: 0.9rem; font-weight: 600; color: #555;">
+                📊 이사 준비 진행률
+            </span>
+            <span style="font-size: 1.1rem; font-weight: bold; color: #667eea;">
+                {int(progress * 100)}%
+            </span>
+        </div>
+        <div style="
+            width: 100%;
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        ">
+            <div style="
+                width: {progress * 100}%;
+                height: 100%;
+                background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+                transition: width 0.3s ease;
+            "></div>
+        </div>
+        <div style="
+            font-size: 0.85rem;
+            color: #666;
+            text-align: left;
+        ">
+            ✅ 완료: {completed_count}/{total_count} 항목
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 
 def render_chat():
     """채팅 UI 렌더링"""
-    # 메신저 스타일 CSS
+    # 메신저 스타일 CSS (톤 다운 + 그림자)
     st.markdown("""
     <style>
-    .message-row { display: flex; margin: 0.5rem 0; }
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+        padding: 1.5rem 0;
+        max-height: 500px;
+        overflow-y: auto;
+        background-color: #fafafa;
+        border-radius: 12px;
+        padding: 1.5rem;
+    }
+    .message-row { display: flex; margin: 0.5rem 0; align-items: flex-start; }
     .message-row.user { justify-content: flex-end; }
     .message-row.assistant { justify-content: flex-start; }
     .message-bubble {
         max-width: 70%;
-        padding: 0.75rem 1rem;
-        border-radius: 1rem;
+        padding: 1rem 1.2rem;
+        border-radius: 16px;
         word-wrap: break-word;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        line-height: 1.6;
     }
     .message-bubble.user {
-        background-color: #667eea;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
-        border-bottom-right-radius: 0.25rem;
+        border-bottom-right-radius: 4px;
+        border: 2px solid rgba(102, 126, 234, 0.3);
     }
     .message-bubble.assistant {
-        background-color: #e9ecef;
-        color: #212529;
-        border-bottom-left-radius: 0.25rem;
+        background-color: #ffffff;
+        color: #262730;
+        border-bottom-left-radius: 4px;
+        border: 2px solid #e0e0e0;
     }
-    .message-bubble p { margin: 0; line-height: 1.5; }
+    .message-bubble p { margin: 0; line-height: 1.6; }
     </style>
     """, unsafe_allow_html=True)
 
     # 환영 메시지
     if len(st.session_state.chat_messages) == 0:
-        st.session_state.chat_messages.append({
-            "role": "assistant",
-            "content": "안녕하세요! 이사 준비에 대해 궁금한 점을 물어보세요. 도와드리겠습니다."
-        })
+        st.session_state.chat_messages.extend([
+            {
+                "role": "assistant",
+                "content": "안녕하세요! 이사 준비에 대해 궁금한 점을 물어보세요. 도와드리겠습니다."
+            },
+            {
+                "role": "assistant",
+                "content": "💡 예시: '전입신고는 언제 해야 하나요?', '이삿짐 센터는 어떻게 예약하나요?'"
+            }
+        ])
 
     # 대화 이력
+    st.markdown('<div class="chat-container">', unsafe_allow_html=True)
     for message in st.session_state.chat_messages:
         role = message["role"]
         content = message["content"]
@@ -420,9 +546,10 @@ def render_chat():
             </div>
         </div>
         """, unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
     # 입력
-    user_input = st.chat_input("메시지를 입력하세요...")
+    user_input = st.chat_input("예: 전입신고 언제 해요?")
 
     # 빠른 질문 처리
     quick_question = st.session_state.get("quick_question")
