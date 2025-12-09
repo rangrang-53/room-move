@@ -47,6 +47,7 @@ with st.sidebar:
 
     # 3. 지역 선택
     st.subheader("📍 지역 선택")
+    st.caption("이삿짐 센터를 검색할 지역을 선택하세요")
     regions = [
         "서울 강남구",
         "서울 송파구",
@@ -63,6 +64,23 @@ with st.sidebar:
     )
     st.session_state.selected_region = selected_region
 
+    # 지역 정보 요약 표시
+    st.markdown(
+        f"""
+        <div style="
+            background-color: rgba(102, 126, 234, 0.1);
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: #555;
+        ">
+            📌 선택된 지역: <strong>{selected_region}</strong>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
     # 4. 이삿짐 정보
     with st.expander("🚚 이삿짐 업체 정보", expanded=False):
         render_movers_table(selected_region)
@@ -74,8 +92,39 @@ with st.sidebar:
     st.caption("📧 문의: support@roommove.com")
 
 # ========== 메인 화면 및 우측 사이드바 ==========
-# 메인 화면과 우측 사이드바를 컬럼으로 분할
-col_main, col_right = st.columns([3, 1])
+# 메인 화면과 우측 사이드바를 컬럼으로 분할 (비율 조정: 왼쪽 축소, 오른쪽 확대)
+col_main, col_right = st.columns([2.5, 1.5])
+
+# 빠른 질문 버튼 스타일링
+st.markdown("""
+<style>
+/* 빠른 질문 버튼 스타일 */
+.stButton > button {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%) !important;
+    color: #667eea !important;
+    border: 2px solid rgba(102, 126, 234, 0.3) !important;
+    border-radius: 12px !important;
+    padding: 0.8rem 1.2rem !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1) !important;
+    transition: all 0.3s ease !important;
+}
+
+.stButton > button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2) !important;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.25) 0%, rgba(118, 75, 162, 0.25) 100%) !important;
+    border: 2px solid rgba(102, 126, 234, 0.4) !important;
+}
+
+.stButton > button:active {
+    transform: translateY(0) !important;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 with col_main:
     # 챗봇 중심 UI
@@ -106,19 +155,6 @@ with col_main:
     # 챗봇 렌더링 (메인)
     render_chatbot()
 
-# ========== 우측 사이드바 (체크리스트) ==========
-# 우측 컬럼 스타일 (전역 CSS)
-st.markdown("""
-<style>
-/* 우측 컬럼 배경색 - 구조에 맞춰 선택 */
-section.main > div:first-child > div.block-container > div > div > div > div:nth-child(2) {
-    background-color: #f0f2f6 !important;
-    padding: 2rem 1rem !important;
-    min-height: 100vh;
-}
-</style>
-""", unsafe_allow_html=True)
-
 with col_right:
-    st.subheader("✅ 이사 체크리스트")
+    st.markdown('<h3 style="margin-top: 0; padding-top: 0;">✅ 이사 체크리스트</h3>', unsafe_allow_html=True)
     render_checklist()

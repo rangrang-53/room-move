@@ -6,22 +6,26 @@ from datetime import datetime
 def render_chatbot():
     """챗봇 컴포넌트"""
 
-    # 메신저 스타일 CSS
+    # 메신저 스타일 CSS (개선된 말풍선 + 구분선)
     st.markdown("""
     <style>
     /* 메신저 스타일 말풍선 */
     .chat-container {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
-        padding: 1rem 0;
+        gap: 1.2rem;
+        padding: 1.5rem 0;
         max-height: 500px;
         overflow-y: auto;
+        background-color: #fafafa;
+        border-radius: 12px;
+        padding: 1.5rem;
     }
 
     .message-row {
         display: flex;
         margin: 0.5rem 0;
+        align-items: flex-start;
     }
 
     .message-row.user {
@@ -34,26 +38,30 @@ def render_chatbot():
 
     .message-bubble {
         max-width: 70%;
-        padding: 0.75rem 1rem;
-        border-radius: 1rem;
+        padding: 1rem 1.2rem;
+        border-radius: 16px;
         word-wrap: break-word;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        line-height: 1.6;
     }
 
     .message-bubble.user {
-        background-color: #667eea;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
-        border-bottom-right-radius: 0.25rem;
+        border-bottom-right-radius: 4px;
+        border: 2px solid rgba(102, 126, 234, 0.3);
     }
 
     .message-bubble.assistant {
-        background-color: #e9ecef;
-        color: #212529;
-        border-bottom-left-radius: 0.25rem;
+        background-color: #ffffff;
+        color: #262730;
+        border-bottom-left-radius: 4px;
+        border: 2px solid #e0e0e0;
     }
 
     .message-bubble p {
         margin: 0;
-        line-height: 1.5;
+        line-height: 1.6;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -62,12 +70,18 @@ def render_chatbot():
     if "chat_messages" not in st.session_state:
         st.session_state.chat_messages = []
 
-    # 기본 환영 메시지
+    # 기본 환영 메시지 (예시 대화 포함)
     if len(st.session_state.chat_messages) == 0:
-        st.session_state.chat_messages.append({
-            "role": "assistant",
-            "content": "안녕하세요! 이사 준비에 대해 궁금한 점을 물어보세요. 도와드리겠습니다."
-        })
+        st.session_state.chat_messages.extend([
+            {
+                "role": "assistant",
+                "content": "안녕하세요! 이사 준비에 대해 궁금한 점을 물어보세요. 도와드리겠습니다."
+            },
+            {
+                "role": "assistant",
+                "content": "💡 예시: '전입신고는 언제 해야 하나요?', '이삿짐 센터는 어떻게 예약하나요?'"
+            }
+        ])
 
     # 대화 이력 렌더링 (메신저 스타일)
     st.markdown('<div class="chat-container">', unsafe_allow_html=True)
@@ -87,8 +101,8 @@ def render_chatbot():
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # 사용자 입력 (항상 표시)
-    user_input = st.chat_input("메시지를 입력하세요...")
+    # 사용자 입력 (placeholder 추가)
+    user_input = st.chat_input("예: 전입신고 언제 해요?")
 
     # 초기화 버튼 (입력창 아래에 우측 정렬)
     if len(st.session_state.chat_messages) > 1:
