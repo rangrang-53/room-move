@@ -275,8 +275,9 @@ def calculate_dday(move_date: date) -> Dict[str, Any]:
 # 이삿짐 센터 데이터 (CSV에서 로드)
 # ============================================
 
+@st.cache_data
 def load_movers_from_csv() -> List[Dict]:
-    """CSV 파일에서 이삿짐 센터 데이터 로드"""
+    """CSV 파일에서 이삿짐 센터 데이터 로드 (캐싱됨)"""
     import pandas as pd
 
     # CSV 파일 경로 (Streamlit Cloud에서는 상대 경로 사용)
@@ -675,7 +676,7 @@ def main():
         border-radius: 12px !important;
         padding: 0.8rem 1.2rem !important;
         font-size: 0.95rem !important;
-        font-weight: 700 !important;
+        font-weight: 800 !important;
         text-align: center !important;
         box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1) !important;
         transition: all 0.3s ease !important;
