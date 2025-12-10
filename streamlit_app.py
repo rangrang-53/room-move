@@ -624,7 +624,7 @@ def render_chat():
         answer = get_ai_response(user_input)
 
         # 자동 체크 메시지가 있으면 별도 말풍선
-        if auto_check_result["checked_items"]:
+        if auto_check_result["message"]:
             st.session_state.chat_messages.append({
                 "role": "assistant",
                 "content": f"✅ {auto_check_result['message']}"
