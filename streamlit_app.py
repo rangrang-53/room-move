@@ -611,6 +611,35 @@ def main():
     # 메인 레이아웃
     col_main, col_right = st.columns([3, 1])
 
+    # 빠른 질문 버튼 스타일링
+    st.markdown("""
+    <style>
+    /* 빠른 질문 버튼 스타일 */
+    .stButton > button {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%) !important;
+        color: #667eea !important;
+        border: 2px solid rgba(102, 126, 234, 0.3) !important;
+        border-radius: 12px !important;
+        padding: 0.8rem 1.2rem !important;
+        font-size: 0.95rem !important;
+        font-weight: 700 !important;
+        text-align: center !important;
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1) !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .stButton > button:hover {
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2) !important;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.25) 0%, rgba(118, 75, 162, 0.25) 100%) !important;
+        border: 2px solid rgba(102, 126, 234, 0.4) !important;
+    }
+
+    .stButton > button:active {
+        transform: none !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
     with col_main:
         st.title("💬 AI 이사 도우미")
 
