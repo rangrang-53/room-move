@@ -88,6 +88,46 @@ def detect_completed_tasks(message: str) -> List[str]:
 
     return list(set(detected))
 
+def detect_move_date_from_message(message: str) -> Optional[date]:
+    """메시지에서 이사 날짜 감지"""
+    import re
+
+    # 날짜 패턴들
+    patterns = [
+        # YYYY-MM-DD, YYYY/MM/DD, YYYY.MM.DD
+        r'(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})',
+        # MM월 DD일, M월 D일
+        r'(\d{1,2})월\s*(\d{1,2})일',
+        # 12/23, 1/5 형식
+        r'(\d{1,2})/(\d{1,2})(?!\d)',
+    ]
+
+    today = date.today()
+    current_year = today.year
+
+    for pattern in patterns:
+        matches = re.findall(pattern, message)
+        if matches:
+            try:
+                if len(matches[0]) == 3:  # YYYY-MM-DD 형식
+                    year, month, day = matches[0]
+                    return date(int(year), int(month), int(day))
+                elif len(matches[0]) == 2:  # MM월 DD일 또는 MM/DD 형식
+                    month, day = matches[0]
+                    # 현재 연도로 시도
+                    try:
+                        move_date = date(current_year, int(month), int(day))
+                        # 과거 날짜면 다음 연도로
+                        if move_date < today:
+                            move_date = date(current_year + 1, int(month), int(day))
+                        return move_date
+                    except:
+                        continue
+            except:
+                continue
+
+    return None
+
 def auto_check_from_message(message: str) -> Dict[str, Any]:
     """메시지에서 완료된 작업을 감지하여 자동 체크"""
     detected_tasks = detect_completed_tasks(message)
@@ -100,12 +140,25 @@ def auto_check_from_message(message: str) -> Dict[str, Any]:
                 checked_items.append(item["title"])
                 break
 
-    if checked_items:
-        message = f"'{', '.join(checked_items)}' 항목을 완료 처리했습니다."
-    else:
-        message = ""
+    # 이사 날짜 감지
+    move_date = detect_move_date_from_message(message)
+    date_message = ""
+    if move_date:
+        st.session_state.move_date = move_date
+        date_message = f"이사 날짜를 {move_date.strftime('%Y년 %m월 %d일')}로 설정했습니다."
 
-    return {"checked_items": checked_items, "message": message}
+    if checked_items:
+        result_message = f"'{', '.join(checked_items)}' 항목을 완료 처리했습니다."
+    else:
+        result_message = ""
+
+    if date_message:
+        if result_message:
+            result_message += " " + date_message
+        else:
+            result_message = date_message
+
+    return {"checked_items": checked_items, "message": result_message}
 
 
 # ============================================
