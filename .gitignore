@@ -70,7 +70,9 @@ coverage.xml
 *.sqlite
 *.sqlite3
 database.db
-backend/data
+backend/data/*.db
+backend/data/*.sqlite
+backend/data/*.sqlite3
 
 # Logs
 *.log
