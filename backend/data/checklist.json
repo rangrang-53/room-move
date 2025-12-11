@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "title": "전입신고 (이사 후 14일 이내)",
+    "description": "주민센터 방문 또는 정부24 온라인 신청",
+    "completed": false
+  },
+  {
+    "id": 2,
+    "title": "인터넷/TV 해지 신청",
+    "description": "기존 거주지 인터넷, TV 서비스 해지",
+    "completed": false
+  },
+  {
+    "id": 3,
+    "title": "공공요금 정산 및 해지",
+    "description": "전기, 가스, 수도 요금 정산 및 해지",
+    "completed": false
+  },
+  {
+    "id": 4,
+    "title": "이삿짐 센터 예약",
+    "description": "최소 1주일 전 예약 권장",
+    "completed": false
+  },
+  {
+    "id": 5,
+    "title": "청소 및 정리",
+    "description": "기존 거주지 청소 및 정리정돈",
+    "completed": false
+  },
+  {
+    "id": 6,
+    "title": "우편물 전달 신청",
+    "description": "우체국 주소 변경 신청",
+    "completed": false
+  },
+  {
+    "id": 7,
+    "title": "보증금 반환 확인",
+    "description": "임대인에게 보증금 반환 일정 확인",
+    "completed": false
+  }
+]
