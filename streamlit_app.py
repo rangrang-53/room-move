@@ -378,8 +378,23 @@ def render_sidebar():
         # 지역 선택
         st.markdown("#### 📍 지역 선택")
         regions = ["서울 강남구", "서울 서초구", "서울 송파구", "서울 마포구", "서울 영등포구"]
-        region = st.selectbox("", regions, index=regions.index(st.session_state.region) if st.session_state.region in regions else 0, label_visibility="collapsed")
-        st.session_state.region = region
+
+        # 초기값 설정
+        if st.session_state.region not in regions:
+            st.session_state.region = regions[0]
+
+        region = st.selectbox(
+            "",
+            regions,
+            index=regions.index(st.session_state.region),
+            label_visibility="collapsed",
+            key="region_selector"
+        )
+
+        # 지역이 변경되면 즉시 반영
+        if region != st.session_state.region:
+            st.session_state.region = region
+            st.rerun()
 
         # 이삿짐 업체 정보
         with st.expander("🚚 이삿짐 업체 정보"):
